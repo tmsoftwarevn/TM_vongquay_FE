@@ -1,0 +1,15 @@
+.thiet-ke {
+    padding: 0 100px;
+    .group-action {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .text-action {
+            .p-normal {
+                margin: 0;
+            }
+        }
+        .image-upload {
+        }
+    }
+}
