@@ -1,5 +1,5 @@
 .thiet-ke {
-    padding: 0 100px;
+    padding: 0 70px;
     .group-action {
         display: flex;
         align-items: center;
@@ -7,6 +7,20 @@
         .text-action {
             .p-normal {
                 margin: 0;
+                color: black;
+                font-weight: 600;
+            }
+            .p-size {
+                margin: 0;
+                font-style: italic;
+            }
+            span {
+                text-decoration: underline;
+                color: #2124b1;
+                cursor: pointer;
+                &:hover {
+                    color: #2124b1;
+                }
             }
         }
         .image-upload {

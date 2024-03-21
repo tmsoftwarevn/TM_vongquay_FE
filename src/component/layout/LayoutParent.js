@@ -29,11 +29,11 @@ const LayoutParent = () => {
   const items = [
     getItem("Trang chủ", "1", <PieChartOutlined />),
     getItem("Thiết lập chung", "2", <DesktopOutlined />),
-    getItem("Kho phần thưởng", "3", <PieChartOutlined />),
+    getItem(<Link to="/phan-thuong">Phần thưởng</Link>, "3", <PieChartOutlined />),
     getItem(<Link to="/thiet-ke">Thiết kế</Link>, "4", <DesktopOutlined />),
 
-    getItem("Trúng thưởng", "5", <PieChartOutlined />),
-    getItem("Báo cáo", "6", <DesktopOutlined />),
+    getItem(<Link to="/bao-cao">Báo cáo</Link>, "5", <PieChartOutlined />),
+    getItem("Landing page", "6", <DesktopOutlined />),
   ];
   return (
     <Layout
