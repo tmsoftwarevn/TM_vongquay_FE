@@ -4,6 +4,7 @@ import Layout from "./component/layout/LayoutParent";
 import ThietKe from "./page/ThietKe";
 import PhanThuong from "./page/PhanThuong";
 import BaoCao from "./page/BaoCao";
+import ThietLapChung from "./page/ThietLapChung";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -13,15 +14,19 @@ const App = () => {
       children: [
         { index: true, element: <Home /> },
         {
-          path: "thiet-ke",
+          path: "thiet-lap-chung/:id",
+          element: <ThietLapChung />
+        },
+        {
+          path: "thiet-ke/:id",
           element: <ThietKe />,
         },
         {
-          path: "phan-thuong",
+          path: "phan-thuong/:id",
           element: <PhanThuong />,
         },
         {
-          path: "bao-cao",
+          path: "bao-cao/:id",
           element: <BaoCao />,
         },
       ],

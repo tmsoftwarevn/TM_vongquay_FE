@@ -27,13 +27,11 @@ const LayoutParent = () => {
   } = theme.useToken();
 
   const items = [
-    getItem("Trang chủ", "1", <PieChartOutlined />),
-    getItem("Thiết lập chung", "2", <DesktopOutlined />),
-    getItem(<Link to="/phan-thuong">Phần thưởng</Link>, "3", <PieChartOutlined />),
-    getItem(<Link to="/thiet-ke">Thiết kế</Link>, "4", <DesktopOutlined />),
+    getItem(<Link to="/thiet-lap-chung/1">Thiết lập chung</Link>, "2", <DesktopOutlined />),
+    getItem(<Link to="/phan-thuong/1">Phần thưởng</Link>, "3", <PieChartOutlined />),
+    getItem(<Link to="/thiet-ke/1">Thiết kế</Link>, "4", <DesktopOutlined />),
 
-    getItem(<Link to="/bao-cao">Báo cáo</Link>, "5", <PieChartOutlined />),
-    getItem("Landing page", "6", <DesktopOutlined />),
+    getItem(<Link to="/bao-cao/1">Báo cáo</Link>, "5", <PieChartOutlined />),
   ];
   return (
     <Layout
@@ -45,6 +43,7 @@ const LayoutParent = () => {
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
+        theme="light"
       >
         <div className="demo-logo-vertical" />
         <Menu

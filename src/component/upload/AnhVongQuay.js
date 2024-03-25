@@ -8,6 +8,7 @@ import HuongDan4 from "../huong_dan/HuongDan4";
 import HuongDan6 from "../huong_dan/HuongDan6";
 import HuongDan8 from "../huong_dan/HuongDan8";
 import HuongDan12 from "../huong_dan/HuongDan12";
+import { useState } from "react";
 
 const item_accord = [
   {
@@ -49,21 +50,11 @@ const item_accord = [
   },
 ];
 
-const onChange = (key) => {
-  console.log(key);
-};
+const onChangeTab = (key) => {};
+
 const item_tab = [
   {
     key: "1",
-    label: "Hướng dẫn",
-    children: (
-      <>
-        <Collapse accordion items={item_accord} />
-      </>
-    ),
-  },
-  {
-    key: "2",
     label: "Xem trước",
     children: (
       <>
@@ -77,29 +68,52 @@ const item_tab = [
       </>
     ),
   },
-];
-const so_manh_ghep = [
   {
-    value: "4",
-    label: "4",
-  },
-  {
-    value: "6",
-    label: "6",
-  },
-  {
-    value: "8",
-    label: "8",
-  },
-  {
-    value: "12",
-    label: "12",
+    key: "2",
+    label: "Hướng dẫn",
+    children: (
+      <>
+        <Collapse accordion items={item_accord} />
+      </>
+    ),
   },
 ];
-const AnhVongQuay = () => {
-  const handleChange_somanh = (value) => {
-    console.log(value);
-  };
+
+
+const AnhVongQuay = (props) => {
+  const { vongquay, setVongquay } = props;
+
+  const item_tab = [
+    {
+      key: "1",
+      label: "Xem trước",
+      children: (
+        <>
+          {vongquay ? (
+            <Image.PreviewGroup>
+              <Image
+                style={{ maxWidth: "500px" }}
+                src={`${process.env.REACT_APP_BACKEND_URL}/images/vongquay/${vongquay}`}
+              />
+            </Image.PreviewGroup>
+          ) : (
+            <></>
+          )}
+        </>
+      ),
+    },
+    {
+      key: "2",
+      label: "Hướng dẫn",
+      children: (
+        <>
+          <Collapse accordion items={item_accord} />
+        </>
+      ),
+    },
+  ];
+
+
   return (
     <div className="vong-quay">
       <Divider />
@@ -117,17 +131,7 @@ const AnhVongQuay = () => {
       <Row gutter={30}>
         <Col span={8}>
           <Card title="Thao tác" bordered={false}>
-            <div className="so-manh-ghep">
-              <p>Số mảnh ghép:</p>
-              <Select
-                labelInValue
-                style={{
-                  width: 120,
-                }}
-                onChange={handleChange_somanh}
-                options={so_manh_ghep}
-              />
-            </div>
+           
             <div className="group-action">
               <div className="text-action">
                 <p className="p-normal">Ảnh vòng quay</p>
@@ -135,14 +139,18 @@ const AnhVongQuay = () => {
                 <span>XEM</span>
               </div>
               <div className="image-upload">
-                <UploadImage />
+                <UploadImage
+                  vongquay={vongquay}
+                  setVongquay={setVongquay}
+                  keyUpload={6}
+                />
               </div>
             </div>
           </Card>
         </Col>
 
         <Col span={16}>
-          <Tabs defaultActiveKey="1" items={item_tab} onChange={onChange} />
+          <Tabs defaultActiveKey="1" items={item_tab} onChange={onChangeTab} />
         </Col>
       </Row>
     </div>

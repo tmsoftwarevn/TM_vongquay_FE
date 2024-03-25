@@ -1,28 +1,92 @@
-import { Button, Card, Col, Flex, Image, Row, Upload } from "antd";
+import { Button, Card, Col, Flex, Image, Row, Upload, message } from "antd";
 import "../scss/thietke.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UploadImage from "../component/upload/UploadImage";
 import AnhVongQuay from "../component/upload/AnhVongQuay";
+import { call_Put_Image, call_get_image } from "../service/api";
+import { useParams } from "react-router-dom";
 const ThietKe = () => {
   const [nut_quay, setNut_quay] = useState();
   const [mui_ten, setMui_ten] = useState();
   const [banner, setBanner] = useState();
   const [anhnen, setAnhnen] = useState();
   const [footer, setFooter] = useState();
+  const [vongquay, setVongquay] = useState();
 
+  const [detailImage, setDetailImage] = useState();
   const [showImage, setShowImage] = useState();
+
+  const params = useParams();
+
+  const fetch_info_image = async () => {
+    const res = await call_get_image(params.id);
+    if (res && res.EC === 1) {
+      setNut_quay(res.data.nut_quay);
+      setMui_ten(res.data.mui_ten);
+      setBanner(res.data.banner);
+      setAnhnen(res.data.anh_nen);
+      setFooter(res.data.footer);
+      setVongquay(res.data.vong_quay);
+      
+    }
+  };
+
+  useEffect(() => {
+    fetch_info_image();
+  },[]);
 
   const handlePreviewImage = (link) => {
     setShowImage(link);
   };
 
-  const handleSave_Thietke = () => {
-    //call api
+  const handleSave_Thietke = async () => {
+    if (!nut_quay) {
+      message.error("Bạn chưa upload ảnh nút quay");
+      return;
+    }
+    if (!mui_ten) {
+      message.error("Bạn chưa upload ảnh mũi tên quay");
+      return;
+    }
+    if (!banner) {
+      message.error("Bạn chưa upload ảnh banner");
+      return;
+    }
+    if (!anhnen) {
+      message.error("Bạn chưa upload ảnh nền");
+      return;
+    }
+    if (!footer) {
+      message.error("Bạn chưa upload ảnh footer");
+      return;
+    }
+    if (!vongquay) {
+      message.error("Bạn chưa upload ảnh vòng quay");
+      return;
+    }
+    
 
-    console.log(nut_quay, mui_ten, banner, anhnen, footer);
+    let res = await call_Put_Image(
+      nut_quay,
+      mui_ten,
+      banner,
+      anhnen,
+      footer,
+      vongquay,
+      1
+    );
+    if (res && res.EC === 1) {
+      message.success("Lưu thành công !");
+    }
   };
+
   return (
     <div className="thiet-ke">
+       <Flex justify="end">
+        <Button type="primary" onClick={() => handleSave_Thietke()}>
+          Lưu
+        </Button>
+      </Flex>
       <Row gutter={30}>
         <Col span={8}>
           <Card title="Thao tác" bordered={false}>
@@ -37,7 +101,11 @@ const ThietKe = () => {
                 </span>
               </div>
               <div className="image-upload">
-                <UploadImage keyUpload={1} setNut_quay={setNut_quay} />
+                <UploadImage
+                  nut_quay={nut_quay}
+                  keyUpload={1}
+                  setNut_quay={setNut_quay}
+                />
               </div>
             </div>
             <div className="group-action">
@@ -49,7 +117,11 @@ const ThietKe = () => {
                 </span>
               </div>
               <div className="image-upload">
-                <UploadImage keyUpload={2} setMui_ten={setMui_ten} />
+                <UploadImage
+                  mui_ten={mui_ten}
+                  keyUpload={2}
+                  setMui_ten={setMui_ten}
+                />
               </div>
             </div>
 
@@ -62,7 +134,11 @@ const ThietKe = () => {
                 </span>
               </div>
               <div className="image-upload">
-                <UploadImage keyUpload={3} setBanner={setBanner} />
+                <UploadImage
+                  banner={banner}
+                  keyUpload={3}
+                  setBanner={setBanner}
+                />
               </div>
             </div>
             <div className="group-action">
@@ -74,7 +150,11 @@ const ThietKe = () => {
                 </span>
               </div>
               <div className="image-upload">
-                <UploadImage keyUpload={4} setAnhnen={setAnhnen} />
+                <UploadImage
+                 anhnen={anhnen}
+                  keyUpload={4}
+                  setAnhnen={setAnhnen}
+                />
               </div>
             </div>
             <div className="group-action">
@@ -86,7 +166,11 @@ const ThietKe = () => {
                 </span>
               </div>
               <div className="image-upload">
-                <UploadImage keyUpload={5} setFooter={setFooter} />
+                <UploadImage
+                  footer={footer}
+                  keyUpload={5}
+                  setFooter={setFooter}
+                />
               </div>
             </div>
           </Card>
@@ -94,18 +178,29 @@ const ThietKe = () => {
 
         <Col span={16}>
           <Card title="Xem trước" bordered={false}>
-            <Image.PreviewGroup>
-              <Image
-                style={{ maxWidth: "500px" }}
-                src={`${process.env.REACT_APP_BACKEND_URL}/images/${showImage}`}
-              />
-            </Image.PreviewGroup>
+            {showImage ? (
+              <>
+                <Image.PreviewGroup>
+                  <Image
+                    style={{ maxWidth: "500px" }}
+                    src={`${process.env.REACT_APP_BACKEND_URL}/images/${showImage}`}
+                  />
+                </Image.PreviewGroup>
+              </>
+            ) : (
+              <></>
+            )}
           </Card>
         </Col>
       </Row>
 
-      <AnhVongQuay />
-      <Flex justify="end">
+      <AnhVongQuay
+        vongquay={vongquay}
+        setVongquay={setVongquay}
+        
+      />
+
+      <Flex justify="end" style={{marginTop: "20px"}}>
         <Button type="primary" onClick={() => handleSave_Thietke()}>
           Lưu
         </Button>
