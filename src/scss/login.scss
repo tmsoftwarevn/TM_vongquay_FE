@@ -1,0 +1,35 @@
+@import './responsive.scss';
+
+.title-tm {
+    color: blue;
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.login {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    justify-content: center;
+    margin: 0 auto;
+    height: 100vh;
+    .login-left {
+        padding: 10px;
+    }
+    .img-login {
+        @include xs {
+            display: none;
+        }
+        @include sm {
+            display: none;
+        }
+        @include lg {
+            display: block;
+        }
+        width: 100%;
+        img {
+            width: 100%;
+        }
+    }
+}

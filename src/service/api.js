@@ -80,6 +80,10 @@ export const call_get_image = (id) => {
 
 // game
 
+export const call_post_game = (name, slug, so_manh, id_Khachhang) => {
+  return axios.post("/api/v1/game", { name, slug, so_manh, id_Khachhang });
+};
+
 export const call_put_game = (name, slug, so_manh, id) => {
   return axios.put(`/api/v1/game/${id}`, {
     name,
@@ -122,4 +126,14 @@ export const call_delete_baocao_id = (id) => {
 
 export const call_update_active = (id, a) => {
   return axios.put(`/api/v1/bao-cao/${id}`, { a });
+};
+
+// khach hang
+
+export const call_register_customer = (name, email, phone, password) => {
+  return axios.post(`/api/v1/customer`, { name, email, phone, password });
+};
+
+export const call_login = (email, password) => {
+  return axios.post("/api/v1/customer-login", { email, password });
 };
