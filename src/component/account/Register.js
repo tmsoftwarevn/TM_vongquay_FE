@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   LockOutlined,
   MailOutlined,
@@ -14,13 +14,16 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (localStorage.getItem("user_id")) navigate("/game");
+  }, []);
+
   const onFinish = async (values) => {
     const { name, email, phone, password } = values;
     let res = await call_register_customer(name, email, phone, password);
-    if( res && res.EC === -2){
-        message.error("Email đã được đăng kí");
-    }
-    else if (res && res.EC === 1) {
+    if (res && res.EC === -2) {
+      message.error("Email đã được đăng kí");
+    } else if (res && res.EC === 1) {
       message.success("Đăng ký thành công !");
       navigate("/login");
     } else {

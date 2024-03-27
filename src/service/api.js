@@ -78,18 +78,42 @@ export const call_get_image = (id) => {
   return axios.get(`/api/v1/image/${id}`);
 };
 
+export const call_post_image = (
+  nut_quay,
+  mui_ten,
+  banner,
+  anh_nen,
+  footer,
+  vong_quay,
+  id_game
+) => {
+  return axios.post(`/api/v1/image${id_game}`, {
+    nut_quay,
+    mui_ten,
+    banner,
+    anh_nen,
+    footer,
+    vong_quay,
+  });
+};
+
 // game
 
 export const call_post_game = (name, slug, so_manh, id_Khachhang) => {
   return axios.post("/api/v1/game", { name, slug, so_manh, id_Khachhang });
 };
 
+// id_game
 export const call_put_game = (name, slug, so_manh, id) => {
   return axios.put(`/api/v1/game/${id}`, {
     name,
     slug,
     so_manh,
   });
+};
+
+export const call_get_info_game = (id) => {
+  return axios.get(`/api/v1/game/${id}`);
 };
 
 // phần quà
@@ -136,4 +160,20 @@ export const call_register_customer = (name, email, phone, password) => {
 
 export const call_login = (email, password) => {
   return axios.post("/api/v1/customer-login", { email, password });
+};
+
+export const call_get_info_detail_customer = (id) => {
+  return axios.get(`/api/v1/info-customer/${id}`);
+};
+
+export const call_update_account = (id, name, phone) => {
+  return axios.put(`/api/v1/customer/${id}`, { name, phone });
+};
+// check game - customer (id, id_khachhang có giống k)
+
+export const call_check_game_customer = (id, id_Khachhang) => {
+  return axios.post("/api/v1/check-game-customer", {
+    id,
+    id_Khachhang,
+  });
 };

@@ -2,9 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Button, Flex, Popconfirm, Table, message } from "antd";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { call_delete_phanqua, call_get_all_phanqua } from "../service/api";
+import {
+  call_check_game_customer,
+  call_delete_phanqua,
+  call_get_all_phanqua,
+  call_get_info_game,
+} from "../service/api";
 import ModalUpdatePhanThuong from "../component/modal/UpdatePhanThuong";
 import ModalAddPhanThuong from "../component/modal/AddPhanthuong";
 
@@ -19,12 +24,37 @@ const PhanThuong = () => {
   const [dataUpdate, setDataUpdate] = useState("");
   const [isModalUpdatePhanqua, setIsModalUpdatePhanqua] = useState();
   const [isModalAddPhanqua, setModalAddPhanqua] = useState();
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    fetch_all_phanqua();
+    fetch_infoGame();
+    fetch_check_game_customer();
+  }, []);
+
+  const fetch_check_game_customer = async () => {
+    let res = await call_check_game_customer(
+      params.id,
+      localStorage.getItem("user_id")
+    );
+    if (res && +res.EC !== 1) {
+      navigate("/game");
+    }
+  };
 
   const fetch_all_phanqua = async () => {
     let res = await call_get_all_phanqua(params.id);
     if (res && res.EC === 1) {
       setListQua(res.data);
       custom_table(res.data);
+    }
+  };
+
+  const fetch_infoGame = async () => {
+    let res = await call_get_info_game(params.id);
+    if (res && res.EC === 1) {
+      setManh_ghep(res.data.so_manh);
     }
   };
 
@@ -42,7 +72,7 @@ const PhanThuong = () => {
       message.error("Xóa thất bại !");
     }
   };
-  
+
   const columns = [
     {
       title: "STT (Theo thứ tự các mảnh ghép)",
@@ -125,17 +155,19 @@ const PhanThuong = () => {
     });
     setDataTable(arr);
   };
-  useEffect(() => {
-    fetch_all_phanqua();
-  }, []);
 
   const handleAdd_phanqua = () => {
+    // check đã chọn số mảnh ghép chưa
+    if (!manh_ghep) {
+      message.error("Bạn chưa chọn số phần quà ở mục Thiết lập chung !");
+      return;
+    }
     setModalAddPhanqua(true);
   };
   return (
     <div>
       <Flex justify="space-between" style={{ marginBottom: "20px" }}>
-        <Button type="primary">Hướng dẫn</Button>
+        {/* <Button type="primary">Hướng dẫn</Button> */}
         <Button type="primary" onClick={() => handleAdd_phanqua()}>
           <PlusCircleOutlined /> Thêm phần quà
         </Button>
@@ -152,6 +184,8 @@ const PhanThuong = () => {
         fetch_all_phanqua={fetch_all_phanqua}
         isModalAddPhanqua={isModalAddPhanqua}
         setModalAddPhanqua={setModalAddPhanqua}
+        manh_ghep={manh_ghep} // truyen 2 cai, để check ít hoặc nhiều hơn số mảnh
+        listQua={listQua}
       />
     </div>
   );

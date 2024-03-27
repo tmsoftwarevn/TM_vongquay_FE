@@ -12,17 +12,22 @@ const Game = () => {
 
   const handle_create_game = async() =>{
    
+    // check đã tạo game chưa
     let res = await call_post_game("","","", localStorage.getItem("user_id"));
-    if(res && res.EC === -2){
-      alert("game da tao");
-      // save id_game
+    // lưu id_game ở localstorage
+    if(res && res.EC === -2){       /// -2: game đã tạo thì trả về info_game
+      localStorage.setItem("game_id", res.data.id);
+      navigate(`/admin/thiet-lap-chung/${res.data.id}`)
     }
     else if(res && res.EC === 1){
-     alert("tao thanh cong")
+      // chưa thì tạo rồi trả về id_game
+      localStorage.setItem("game_id", res.data.id);
+      navigate(`/admin/thiet-lap-chung/${res.data.id}`)
     }else{
       message.error("Xin hãy thử lại !")
     }
   }
+
   return (
     <>
       <div className="game">

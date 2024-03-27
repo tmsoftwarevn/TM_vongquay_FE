@@ -1,9 +1,13 @@
-import { Button, Card, Flex, Input, Select, message } from "antd";
+import { Button, Card, Flex, Form, Input, Select, message } from "antd";
 import "../scss/thietlapchung.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { convertSlug } from "../utils/convertSlug";
-import { call_put_game } from "../service/api";
-import { useParams } from "react-router-dom";
+import {
+  call_check_game_customer,
+  call_get_info_game,
+  call_put_game,
+} from "../service/api";
+import { useNavigate, useParams } from "react-router-dom";
 
 const so_manh_ghep = [
   {
@@ -24,15 +28,44 @@ const so_manh_ghep = [
   },
 ];
 const ThietLapChung = () => {
-  const [name, setName] = useState();
-  const [manh_ghep, setManh_ghep] = useState();
+  const [detailGame, setDetailGame] = useState("");
+  const navigate = useNavigate();
+
+  const [form] = Form.useForm();
   const params = useParams();
 
-  const handleChange_somanh = (value) => {
-    setManh_ghep(value);
+  const fetch_infoGame = async () => {
+    let res = await call_get_info_game(params.id);
+    if (res && res.EC === 1) {
+      setDetailGame(res.data);
+
+      // lưu trong input
+      let init = {
+        name: res.data.name,
+        manh_ghep: res.data.so_manh,
+      };
+      form.setFieldsValue(init);
+    }
   };
 
-  const handel_call_save_game = async () => {
+  // check để user ko xem được game người khác
+  const fetch_check_game_customer = async () => {
+    let res = await call_check_game_customer(
+      params.id,
+      localStorage.getItem("user_id")
+    );
+    if (res && +res.EC !== 1) {
+      navigate("/game");
+    }
+  };
+  
+  useEffect(() => {
+    fetch_infoGame();
+    fetch_check_game_customer();
+  }, []);
+
+  const onFinish = async (values) => {
+    const { name, manh_ghep } = values;
     if (!name) {
       message.error("Bạn chưa nhập tên chương trình !");
       return;
@@ -53,28 +86,42 @@ const ThietLapChung = () => {
   return (
     <div className="thiet-lap-chung">
       <Flex justify="end" style={{ marginBottom: "20px" }}>
-        <Button type="primary" onClick={() => handel_call_save_game()}>
+        <Button type="primary" onClick={() => form.submit()}>
           Lưu
         </Button>
       </Flex>
       <Card title="Thông tin chung">
-        <div className="group">
-          <p>Tên chương trình: </p>
-          <Input onChange={(e) => setName(e.target.value)} />
-        </div>
-        <div className="group" style={{ marginTop: "35px" }}>
-          <p>Số phần quà: (số mảnh ghép của vòng quay)</p>
-          <div className="so-manh-ghep">
+        <Form onFinish={onFinish} form={form}>
+          <Form.Item
+            name="name"
+            label="Tên chương trình"
+            rules={[
+              {
+                required: true,
+                message: "Hãy nhập tên chương trình!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="manh_ghep"
+            label="Số phần quà (số mảnh ghép)"
+            rules={[
+              {
+                required: true,
+                message: "Hãy chọn số phần quà!",
+              },
+            ]}
+          >
             <Select
               style={{
                 width: 100,
               }}
-              onChange={(e) => handleChange_somanh(e)}
               options={so_manh_ghep}
-              //   value={manh_ghep}
             />
-          </div>
-        </div>
+          </Form.Item>
+        </Form>
       </Card>
     </div>
   );

@@ -11,7 +11,7 @@ const Login = () => {
 
   useEffect(() => {
     if (localStorage.getItem("user_id"))
-      navigate("/");
+      navigate("/game");
   }, []);
 
   const onFinish = async (values) => {
@@ -21,7 +21,7 @@ const Login = () => {
       localStorage.setItem("user_id", res.data.id);
       message.success("Đăng nhập thành công !");
       setTimeout(() => {
-        navigate("/");
+        navigate("/game");
       }, 500);
     } else {
       message.error("Tài khoản hoặc mật khẩu không chính xác.");

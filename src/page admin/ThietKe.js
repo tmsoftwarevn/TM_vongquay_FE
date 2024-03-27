@@ -3,8 +3,8 @@ import "../scss/thietke.scss";
 import { useEffect, useState } from "react";
 import UploadImage from "../component/upload/UploadImage";
 import AnhVongQuay from "../component/upload/AnhVongQuay";
-import { call_Put_Image, call_get_image } from "../service/api";
-import { useParams } from "react-router-dom";
+import { call_Put_Image, call_check_game_customer, call_get_image } from "../service/api";
+import { useNavigate, useParams } from "react-router-dom";
 const ThietKe = () => {
   const [nut_quay, setNut_quay] = useState();
   const [mui_ten, setMui_ten] = useState();
@@ -15,7 +15,7 @@ const ThietKe = () => {
 
   const [detailImage, setDetailImage] = useState();
   const [showImage, setShowImage] = useState();
-
+  const navigate = useNavigate();
   const params = useParams();
 
   const fetch_info_image = async () => {
@@ -30,9 +30,20 @@ const ThietKe = () => {
       
     }
   };
+  const fetch_check_game_customer = async () => {
+    let res = await call_check_game_customer(
+      params.id,
+      localStorage.getItem("user_id")
+    );
+    if (res && +res.EC !== 1) {
+      navigate("/game");
+    }
+  };
 
   useEffect(() => {
     fetch_info_image();
+    fetch_check_game_customer();
+
   },[]);
 
   const handlePreviewImage = (link) => {
@@ -41,7 +52,7 @@ const ThietKe = () => {
 
   const handleSave_Thietke = async () => {
     if (!nut_quay) {
-      message.error("Bạn chưa upload ảnh nút quay");
+      message.error("Bạn chưa upload ảnh nút vòng quay");
       return;
     }
     if (!mui_ten) {
@@ -73,7 +84,7 @@ const ThietKe = () => {
       anhnen,
       footer,
       vongquay,
-      1
+      params.id
     );
     if (res && res.EC === 1) {
       message.success("Lưu thành công !");

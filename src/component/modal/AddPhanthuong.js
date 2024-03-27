@@ -15,16 +15,26 @@ import { call_add_phanqua } from "../../service/api";
 import { useParams } from "react-router-dom";
 
 const ModalAddPhanThuong = (props) => {
-  const { fetch_all_phanqua, isModalAddPhanqua, setModalAddPhanqua } = props;
+  const {
+    fetch_all_phanqua,
+    isModalAddPhanqua,
+    setModalAddPhanqua,
+    manh_ghep,
+    listQua,
+  } = props;
 
   const [form] = Form.useForm();
-    const params = useParams();
+  const params = useParams();
   const handleCancel = () => {
     setModalAddPhanqua(false);
   };
   const onFinish = async (values) => {
+    if(listQua.length === manh_ghep){
+      message.error("Bạn đã nhập đủ số phần quà !");
+      return;
+    }
+    
     const { name, tile, stt } = values;
-
     fetchAdd_phanqua(name, tile, stt);
   };
 
@@ -33,7 +43,7 @@ const ModalAddPhanThuong = (props) => {
   }, [isModalAddPhanqua]);
 
   const fetchAdd_phanqua = async (name, tile, stt) => {
-    let res = await call_add_phanqua(name, tile, stt,params.id);
+    let res = await call_add_phanqua(name, tile, stt, params.id);
     if (res && res.EC === 1) {
       message.success("Thêm phần quà thành công");
       setModalAddPhanqua(false);
@@ -96,7 +106,7 @@ const ModalAddPhanThuong = (props) => {
                 rules={[
                   {
                     required: true,
-                    message: "STT được để trống !",
+                    message: "STT không được để trống !",
                   },
                 ]}
               >

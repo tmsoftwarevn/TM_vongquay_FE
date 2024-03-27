@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../../scss/quenmatkhau.scss";
 import { Button, Form, Input, message, notification, Steps } from "antd";
 import { useNavigate } from "react-router-dom";
-// import { callNewPassword, callSendOTP, callVerify } from "../../services/api";
+
 
 const QuenMatkhau = () => {
   const [current, setCurrent] = useState(0);
@@ -10,6 +10,10 @@ const QuenMatkhau = () => {
   const otpRef = useRef();
   const navigate = useNavigate();
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (localStorage.getItem("user_id")) navigate("/game");
+  }, []);
 
   const next = () => {
     setCurrent(current + 1);

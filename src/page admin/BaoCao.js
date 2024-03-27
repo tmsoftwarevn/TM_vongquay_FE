@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Checkbox, Popconfirm, Table, message } from "antd";
 import {
+  call_check_game_customer,
   call_delete_baocao_id,
   call_get_all_baocao,
   call_update_active,
 } from "../service/api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import { Button, Input, Space } from "antd";
 import Highlighter from "react-highlight-words";
@@ -162,8 +163,9 @@ const BaoCao = () => {
       dataIndex: "active",
       render: (text, record, index) => {
         return (
-          <Checkbox onChange={(e) => onChangeLienhe(e, record?.id)}>
+          <Checkbox defaultChecked={record.active ? true :false} onChange={(e) => onChangeLienhe(e, record?.id)}>
             Đã liên hệ
+            
           </Checkbox>
         );
       },
@@ -231,6 +233,7 @@ const BaoCao = () => {
   };
   //////
   const params = useParams();
+  const navigate = useNavigate();
   const [dataTable, setDataTable] = useState();
 
   const fetch_baocao = async () => {
@@ -267,8 +270,19 @@ const BaoCao = () => {
     setDataTable(arr);
   };
 
+  const fetch_check_game_customer = async () => {
+    let res = await call_check_game_customer(
+      params.id,
+      localStorage.getItem("user_id")
+    );
+    if (res && +res.EC !== 1) {
+      navigate("/game");
+    }
+  };
+
   useEffect(() => {
     fetch_baocao();
+    fetch_check_game_customer();
   }, []);
 
   return (

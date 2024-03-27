@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Button, Flex, Layout, Menu, message, theme } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import Account from "./Account";
 const { Header, Content, Footer, Sider } = Layout;
 function getItem(label, key, icon, children) {
   return {
@@ -35,12 +36,6 @@ const LayoutHome = () => {
     getItem(<Link to="/tai-khoan">Tài khoản</Link>, "3", <PieChartOutlined />),
   ];
 
-  const handleLogout =() =>{
-    localStorage.removeItem('user_id');
-    message.success("Đăng xuất thành công !")
-    navigate("/login")
-  }
-
   return (
     <Layout
       style={{
@@ -68,16 +63,10 @@ const LayoutHome = () => {
             background: colorBgContainer,
           }}
         >
-          {/* <Avatar
-            style={{
-              backgroundColor: "#87d068",
-            }}
-            icon={<UserOutlined />}
-          /> */}
-
           <Flex justify="end" style={{ marginRight: "10px" }}>
-            <Button type="primary" onClick={() => handleLogout()}>Đăng xuất</Button>
+            <Account />
           </Flex>
+
         </Header>
         <Content
           style={{
