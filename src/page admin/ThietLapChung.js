@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { convertSlug } from "../utils/convertSlug";
 import {
   call_check_game_customer,
+  call_get_all_phanqua,
   call_get_info_game,
   call_put_game,
 } from "../service/api";
 import { useNavigate, useParams } from "react-router-dom";
+import { Space, Tooltip } from "antd";
 
 const so_manh_ghep = [
   {
@@ -30,15 +32,17 @@ const so_manh_ghep = [
 const ThietLapChung = () => {
   const [detailGame, setDetailGame] = useState("");
   const navigate = useNavigate();
-
+  const [link, setLink] = useState();
   const [form] = Form.useForm();
   const params = useParams();
+  const [disabled, setDisabled] = useState(false);
+  const [phanqua, setPhanqua] = useState();
 
   const fetch_infoGame = async () => {
     let res = await call_get_info_game(params.id);
     if (res && res.EC === 1) {
       setDetailGame(res.data);
-
+      setLink(process.env.REACT_APP_URL_TEMPLATE + "/" + res.data.slug);
       // lưu trong input
       let init = {
         name: res.data.name,
@@ -58,11 +62,19 @@ const ThietLapChung = () => {
       navigate("/game");
     }
   };
-  
+
   useEffect(() => {
     fetch_infoGame();
     fetch_check_game_customer();
+    fetch_length_phanqua();
   }, []);
+
+  const fetch_length_phanqua = async() =>{
+    let res = await call_get_all_phanqua(localStorage.getItem("game_id"));
+    if(res && res.EC === 1){
+      setPhanqua(res.data.length);
+    }
+  }
 
   const onFinish = async (values) => {
     const { name, manh_ghep } = values;
@@ -74,7 +86,8 @@ const ThietLapChung = () => {
       message.error("Bạn chưa chọn số phần quà !");
       return;
     }
-    let slug = convertSlug(name);
+    let slug = convertSlug(name) + "-" + params.id;
+
     let res = await call_put_game(name, slug, manh_ghep, params.id);
     if (res && res.EC === 1) {
       message.success("Lưu thành công");
@@ -82,6 +95,15 @@ const ThietLapChung = () => {
       message.error("Lưu thất bại. Hãy thử lại sau !");
     }
   };
+
+  const handle_get_link = ()=>{
+    if(phanqua < +detailGame.so_manh){
+      message.error("Bạn chưa nhập đủ số phần quà !");
+      return;
+    }
+    setDisabled(true);
+    navigator.clipboard.writeText(link);
+  }
 
   return (
     <div className="thiet-lap-chung">
@@ -121,6 +143,17 @@ const ThietLapChung = () => {
               options={so_manh_ghep}
             />
           </Form.Item>
+         
+          <Space>
+            <Button
+              onClick={() => handle_get_link()}
+            >
+              {disabled ? "Đã copy" : "Copy"}
+            </Button>
+            <Tooltip>
+              <span>Lấy link vòng quay</span>
+            </Tooltip>
+          </Space>
         </Form>
       </Card>
     </div>

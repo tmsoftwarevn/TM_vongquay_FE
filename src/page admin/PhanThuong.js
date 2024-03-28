@@ -26,7 +26,6 @@ const PhanThuong = () => {
   const [isModalAddPhanqua, setModalAddPhanqua] = useState();
   const navigate = useNavigate();
 
-
   useEffect(() => {
     fetch_all_phanqua();
     fetch_infoGame();
@@ -83,7 +82,7 @@ const PhanThuong = () => {
       dataIndex: "name",
     },
     {
-      title: "Tỉ lệ",
+      title: "Tỉ lệ (%)- Tổng 100%",
       dataIndex: "tile",
     },
     {

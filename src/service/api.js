@@ -177,3 +177,13 @@ export const call_check_game_customer = (id, id_Khachhang) => {
     id_Khachhang,
   });
 };
+
+// password
+
+export const call_check_pass = (email, password) => {
+  return axios.post("/api/v1/check-password", { email, password });
+};
+
+export const call_update_password = (email, password) => {
+  return axios.post("/api/v1/update-password", { email, password });
+};

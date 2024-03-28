@@ -11,7 +11,7 @@ import {
   Steps,
 } from "antd";
 import { useNavigate } from "react-router-dom";
-// import { callNewPassword, callSendOTP, callVerify } from "../../services/api";
+import { call_check_pass, call_update_password } from "../service/api";
 
 const GetPassword = () => {
   const [current, setCurrent] = useState(0);
@@ -31,7 +31,6 @@ const GetPassword = () => {
   };
 
   const handleXacnhan = async () => {
-    next();
     if (!email) {
       message.error("Email không được để trống");
       return;
@@ -42,14 +41,13 @@ const GetPassword = () => {
     }
 
     // call api xác nhận
-    // if (res && res.EC === 1) {
+    let res = await call_check_pass(email, password);
 
-    //   message.success(res.message);
-    //   next();
-    // } else {
-
-    //   message.error(res.message);
-    // }
+    if (res && res.EC === 1) {
+      next();
+    } else {
+      message.error("Tài khoản hoặc mật khẩu không chính xác");
+    }
   };
 
   const onFinish = async (values) => {
@@ -61,13 +59,13 @@ const GetPassword = () => {
       return;
     }
 
-    // let res = await callNewPassword(email, password);
-    // if (res && res.data) {
-    //   message.success("Thay đổi mật khẩu thành công");
-    //   navigate("/login");
-    // } else {
-    //   message.error(res.message);
-    // }
+    let res = await call_update_password(email, password);
+    if (res && res.EC === 1) {
+      message.success("Thay đổi mật khẩu thành công");
+      navigate("/tai-khoan");
+    } else {
+      message.error("Cập nhật thất bại !");
+    }
   };
   const handleNewPassword = async () => {
     form.submit();
@@ -81,14 +79,13 @@ const GetPassword = () => {
           <Row>
             <Col span={8}>
               <Input
-                name="email"
                 placeholder="Nhập email"
                 onChange={(e) => setEmail(e.target.value)}
               ></Input>
               <Input
                 style={{ marginTop: 20 }}
-                name="Mật khẩu"
                 placeholder="Nhập mật khẩu"
+                type="password"
                 onChange={(e) => setPassword(e.target.value)}
               ></Input>
               <Button

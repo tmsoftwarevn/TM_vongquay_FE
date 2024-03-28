@@ -44,7 +44,7 @@ const LayoutParent = () => {
           navigate(`/admin/phan-thuong/${localStorage.getItem("game_id")}`)
         }
       >
-        Phần thưởng
+        Phần quà
       </p>,
       "3",
       <PieChartOutlined />
@@ -101,7 +101,9 @@ const LayoutParent = () => {
           }}
         >
           <Flex justify="end" style={{ marginRight: "10px" }}>
-            <Button type="primary" onClick={() => navigate("/game")}>Trang chủ</Button>
+            <Button type="primary" onClick={() => navigate("/game")}>
+              Trang chủ
+            </Button>
           </Flex>
         </Header>
         <Content
