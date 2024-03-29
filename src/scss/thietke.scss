@@ -6,14 +6,17 @@
         justify-content: space-between;
         .text-action {
             .p-normal {
-                margin: 0;
+                margin-bottom: 10px;
                 color: black;
                 font-weight: 600;
+                font-size: 18px;
             }
             .p-size {
                 margin: 0;
                 font-style: italic;
+                font-family: roboto;
             }
+
             span {
                 text-decoration: underline;
                 color: #2124b1;

@@ -135,7 +135,8 @@ const AnhVongQuay = (props) => {
             <div className="group-action">
               <div className="text-action">
                 <p className="p-normal">Ảnh vòng quay</p>
-                <p className="p-size">640 x 640</p>
+                <p className="p-size">Kích thước:450 x 450</p>
+                <p className="p-size">(Tối đa 2MB)</p>
                 <span>XEM</span>
               </div>
               <div className="image-upload">

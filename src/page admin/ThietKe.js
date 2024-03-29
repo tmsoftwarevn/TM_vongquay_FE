@@ -3,7 +3,11 @@ import "../scss/thietke.scss";
 import { useEffect, useState } from "react";
 import UploadImage from "../component/upload/UploadImage";
 import AnhVongQuay from "../component/upload/AnhVongQuay";
-import { call_Put_Image, call_check_game_customer, call_get_image } from "../service/api";
+import {
+  call_Put_Image,
+  call_check_game_customer,
+  call_get_image,
+} from "../service/api";
 import { useNavigate, useParams } from "react-router-dom";
 const ThietKe = () => {
   const [nut_quay, setNut_quay] = useState();
@@ -27,7 +31,6 @@ const ThietKe = () => {
       setAnhnen(res.data.anh_nen);
       setFooter(res.data.footer);
       setVongquay(res.data.vong_quay);
-      
     }
   };
   const fetch_check_game_customer = async () => {
@@ -43,8 +46,7 @@ const ThietKe = () => {
   useEffect(() => {
     fetch_info_image();
     fetch_check_game_customer();
-
-  },[]);
+  }, []);
 
   const handlePreviewImage = (link) => {
     setShowImage(link);
@@ -75,7 +77,6 @@ const ThietKe = () => {
       message.error("Bạn chưa upload ảnh vòng quay");
       return;
     }
-    
 
     let res = await call_Put_Image(
       nut_quay,
@@ -93,7 +94,7 @@ const ThietKe = () => {
 
   return (
     <div className="thiet-ke">
-       <Flex justify="end">
+      <Flex justify="end">
         <Button type="primary" onClick={() => handleSave_Thietke()}>
           Lưu
         </Button>
@@ -104,7 +105,8 @@ const ThietKe = () => {
             <div className="group-action">
               <div className="text-action">
                 <p className="p-normal">Nút vòng quay</p>
-                <p className="p-size">640 x 640</p>
+                <p className="p-size">Kích thước:50x50</p>
+                <p className="p-size">(Tối đa 2MB)</p>
                 <span
                   onClick={() => handlePreviewImage(`vongquay/${nut_quay}`)}
                 >
@@ -122,7 +124,8 @@ const ThietKe = () => {
             <div className="group-action">
               <div className="text-action">
                 <p className="p-normal">Mũi tên quay</p>
-                <p className="p-size">640 x 640</p>
+                <p className="p-size">Kích thước:40 x 60</p>
+                <p className="p-size">(Tối đa 2MB)</p>
                 <span onClick={() => handlePreviewImage(`vongquay/${mui_ten}`)}>
                   Xem
                 </span>
@@ -139,7 +142,8 @@ const ThietKe = () => {
             <div className="group-action">
               <div className="text-action">
                 <p className="p-normal">Ảnh banner </p>
-                <p className="p-size">640 x 640</p>
+                <p className="p-size">Kích thước:960 x 400</p>
+                <p className="p-size">(Tối đa 2MB)</p>
                 <span onClick={() => handlePreviewImage(`banner/${banner}`)}>
                   Xem
                 </span>
@@ -155,14 +159,15 @@ const ThietKe = () => {
             <div className="group-action">
               <div className="text-action">
                 <p className="p-normal">Ảnh nền </p>
-                <p className="p-size">640 x 640</p>
+                <p className="p-size">Kích thước:960 x 400</p>
+                <p className="p-size">(Tối đa 2MB)</p>
                 <span onClick={() => handlePreviewImage(`anh_nen/${anhnen}`)}>
                   Xem
                 </span>
               </div>
               <div className="image-upload">
                 <UploadImage
-                 anhnen={anhnen}
+                  anhnen={anhnen}
                   keyUpload={4}
                   setAnhnen={setAnhnen}
                 />
@@ -171,7 +176,8 @@ const ThietKe = () => {
             <div className="group-action">
               <div className="text-action">
                 <p className="p-normal">Ảnh footer </p>
-                <p className="p-size">640 x 640</p>
+                <p className="p-size">Kích thước:960 x 400</p>
+                <p className="p-size">(Tối đa 2MB)</p>
                 <span onClick={() => handlePreviewImage(`footer/${footer}`)}>
                   Xem
                 </span>
@@ -205,13 +211,9 @@ const ThietKe = () => {
         </Col>
       </Row>
 
-      <AnhVongQuay
-        vongquay={vongquay}
-        setVongquay={setVongquay}
-        
-      />
+      <AnhVongQuay vongquay={vongquay} setVongquay={setVongquay} />
 
-      <Flex justify="end" style={{marginTop: "20px"}}>
+      <Flex justify="end" style={{ marginTop: "20px" }}>
         <Button type="primary" onClick={() => handleSave_Thietke()}>
           Lưu
         </Button>

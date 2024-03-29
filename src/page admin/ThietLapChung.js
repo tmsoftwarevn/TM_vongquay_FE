@@ -101,6 +101,12 @@ const ThietLapChung = () => {
       message.error("Bạn chưa nhập đủ số phần quà !");
       return;
     }
+
+    if(!detailGame.slug){
+      message.error("Bạn chưa lưu tên chương trình !")
+      return;
+    }
+
     setDisabled(true);
     navigator.clipboard.writeText(link);
   }
