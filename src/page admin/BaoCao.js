@@ -12,6 +12,8 @@ import { Button, Input, Space } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import { MdDelete } from "react-icons/md";
+import { CSVLink } from "react-csv";
+
 
 const title = "Xác nhận xóa ?";
 const BaoCao = () => {
@@ -234,7 +236,7 @@ const BaoCao = () => {
   //////
   const params = useParams();
   const navigate = useNavigate();
-  const [dataTable, setDataTable] = useState();
+  const [dataTable, setDataTable] = useState("");
 
   const fetch_baocao = async () => {
     let res = await call_get_all_baocao(params.id);
@@ -287,6 +289,11 @@ const BaoCao = () => {
 
   return (
     <div>
+      <CSVLink data={dataTable}>
+        <Button type="primary" className="mb-3">
+          Excel
+        </Button>
+      </CSVLink>
       <Table
         columns={columns}
         dataSource={dataTable}

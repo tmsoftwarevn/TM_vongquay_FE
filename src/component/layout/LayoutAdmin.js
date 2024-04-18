@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../scss/layoutParent.scss";
 import { DesktopOutlined, PieChartOutlined } from "@ant-design/icons";
-import { Button, Flex, Layout, Menu, theme } from "antd";
+import { Button, ConfigProvider, Flex, Layout, Menu, theme } from "antd";
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 const { Header, Content, Footer, Sider } = Layout;
 function getItem(label, key, icon, children) {
@@ -22,6 +22,7 @@ const LayoutParent = () => {
   }, []);
 
   const [collapsed, setCollapsed] = useState(false);
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -73,64 +74,138 @@ const LayoutParent = () => {
       <PieChartOutlined />
     ),
   ];
+  // return (
+  //   <Layout
+  //     style={{
+  //       minHeight: "100vh",
+  //     }}
+  //   >
+  //     <Sider
+  //       collapsible
+  //       collapsed={collapsed}
+  //       onCollapse={(value) => setCollapsed(value)}
+  //       theme="light"
+  //     >
+  //       <div className="demo-logo-vertical" />
+  //       <Menu
+  //         theme="light"
+  //         defaultSelectedKeys={["2"]}
+  //         mode="inline"
+  //         items={items}
+  //       />
+  //     </Sider>
+  //     <Layout>
+  //       <Header
+  //         style={{
+  //           padding: 0,
+  //           background: colorBgContainer,
+  //         }}
+  //       >
+  //         <Flex justify="end" style={{ marginRight: "10px" }}>
+  //           <Button type="primary" onClick={() => navigate("/game")}>
+  //             Trang chủ
+  //           </Button>
+  //         </Flex>
+  //       </Header>
+  //       <Content
+  //         style={{
+  //           margin: "16px",
+  //         }}
+  //       >
+  //         <div
+  //           style={{
+  //             padding: 24,
+  //             minHeight: 500,
+  //             background: colorBgContainer,
+  //             borderRadius: borderRadiusLG,
+  //           }}
+  //         >
+  //           <Outlet />
+  //         </div>
+  //       </Content>
+  //       <Footer
+  //         style={{
+  //           textAlign: "center",
+  //         }}
+  //       >
+  //         Ant Design ©{new Date().getFullYear()} Created by Ant UED
+  //       </Footer>
+  //     </Layout>
+  //   </Layout>
+  // );
+
   return (
-    <Layout
-      style={{
-        minHeight: "100vh",
+    <ConfigProvider
+      theme={{
+        components: {
+          Layout: {
+            siderBg: "#ffff",
+          },
+          Menu: {
+            colorItemBg: "#ffff",
+          },
+          Sider: {},
+        },
       }}
     >
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-        theme="light"
+      <Layout
+        style={{
+          minHeight: "96vh",
+        }}
       >
-        <div className="demo-logo-vertical" />
-        <Menu
-          theme="light"
-          defaultSelectedKeys={["2"]}
-          mode="inline"
-          items={items}
-        />
-      </Sider>
-      <Layout>
-        <Header
-          style={{
-            padding: 0,
-            background: colorBgContainer,
-          }}
+        <Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={(value) => setCollapsed(value)}
+          //theme="light"
         >
-          <Flex justify="end" style={{ marginRight: "10px" }}>
-            <Button type="primary" onClick={() => navigate("/game")}>
-              Trang chủ
-            </Button>
-          </Flex>
-        </Header>
-        <Content
-          style={{
-            margin: "16px",
-          }}
-        >
-          <div
+          <div className="demo-logo-vertical" />
+          <Menu
+            //theme="dark"
+            defaultSelectedKeys={["2"]}
+            mode="inline"
+            items={items}
+          />
+        </Sider>
+        <Layout>
+          <Header
             style={{
-              padding: 24,
-              minHeight: 500,
+              padding: 0,
               background: colorBgContainer,
-              borderRadius: borderRadiusLG,
             }}
           >
-            <Outlet />
-          </div>
-        </Content>
-        <Footer
-          style={{
-            textAlign: "center",
-          }}
-        >
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer>
+            <Flex justify="end" style={{ marginRight: "10px" }}>
+              <Button type="primary" onClick={() => navigate("/game")}>
+                Trang chủ
+              </Button>
+            </Flex>
+          </Header>
+          <Content
+            style={{
+              margin: "16px",
+            }}
+          >
+            <div
+              style={{
+                padding: 24,
+                minHeight: 500,
+                background: colorBgContainer,
+                borderRadius: borderRadiusLG,
+              }}
+            >
+              <Outlet />
+            </div>
+          </Content>
+          <Footer
+            style={{
+              textAlign: "center",
+            }}
+          >
+            ©{new Date().getFullYear()} Created by TM Software
+          </Footer>
+        </Layout>
       </Layout>
-    </Layout>
+    </ConfigProvider>
   );
 };
 export default LayoutParent;

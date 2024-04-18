@@ -89,7 +89,7 @@ const LayoutHome = () => {
             textAlign: "center",
           }}
         >
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          ©{new Date().getFullYear()} Created by TM Software
         </Footer>
       </Layout>
     </Layout>
